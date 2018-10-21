@@ -34,12 +34,16 @@ const styles = {
 class Card extends React.Component {
   state = {
     userId: '',
+    card_expiration_date: '',
     card_number: '',
     card_cvv: '',
     card_holder_name: '',
+
   }
 
   componentDidMount() {
+    const { userId, name } = this.props.location.state;
+    this.setState({ userId, card_holder_name: name })
   }
 
   handleChange = (event, key) => {
@@ -55,7 +59,7 @@ class Card extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { card_number, card_cvv, card_holder_name } = this.state;
+    const { card_number, card_cvv, card_expiration_date } = this.state;
 
     return (
       <div>
@@ -82,10 +86,10 @@ class Card extends React.Component {
 
           <FormControl className={classes.input}>
             <InputLabel htmlFor="card-holder-name">MM/AA</InputLabel>
-            <Input id="card-holder-name" value={card_holder_name} onChange={(e) => this.handleChange(e, 'card_holder_name')} />
+            <Input id="card-holder-name" value={card_expiration_date} onChange={(e) => this.handleChange(e, 'card_expiration_date')} />
           </FormControl>
     
-          <Button variant="contained" color="primary" className={classes.button} onClick={this.handleOnclick}>
+          <Button variant="contained" color="primary" className={classes.button} onClick={() => this.handleOnclick()}>
             Confirmar
           </Button>
         </div>

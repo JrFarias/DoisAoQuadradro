@@ -37,7 +37,6 @@ class Register extends React.Component {
     name: '',
     email: '',
     documentId: '',
-    error: false,
   }
 
   handleChange = (event, key) => {
@@ -45,15 +44,14 @@ class Register extends React.Component {
   };
   
   handleOnclick = () => {
-    if (!!this.state.name && !!this.state.email && !!this.state.documentId) {
-      this.setState({ error: true })
-      return
-    }
-
-    axios.post('http://localhost:3001/api/profile', this.state)
+    axios.post('http://localhost:3001/api/profiles', this.state)
     .then(res => {
-      const userId = res._id;
-      this.props.history.push('/card', userId);
+      const data = {
+        userId: res.data._id,
+        name: res.data.name
+      }
+
+      this.props.history.push('/card', data);
     })
   } 
 
@@ -77,17 +75,17 @@ class Register extends React.Component {
     
           <FormControl className={classes.input}>
             <InputLabel htmlFor="register-name">Nome Completo</InputLabel>
-            <Input id="register-name" value={name} error={error}  onChange={(e) => this.handleChange(e, 'name')} />
+            <Input id="register-name" value={name}  onChange={(e) => this.handleChange(e, 'name')} />
           </FormControl>
     
           <FormControl className={classes.input}>
             <InputLabel htmlFor="register-email">Email</InputLabel>
-            <Input id="register-email" value={email} error={error} onChange={(e) => this.handleChange(e, 'email')} />
+            <Input id="register-email" value={email} onChange={(e) => this.handleChange(e, 'email')} />
           </FormControl>
 
           <FormControl className={classes.input}>
             <InputLabel htmlFor="register-documentId">CPF</InputLabel>
-            <Input id="register-documentId" value={documentId} error={error} onChange={(e) => this.handleChange(e, 'documentId')} />
+            <Input id="register-documentId" value={documentId} onChange={(e) => this.handleChange(e, 'documentId')} />
           </FormControl>
     
           <Button variant="contained" color="primary" className={classes.button} onClick={this.handleOnclick}>
