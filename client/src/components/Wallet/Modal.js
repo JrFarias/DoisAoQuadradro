@@ -8,7 +8,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
-import { withRouter } from "react-router";
+import axios from 'axios';
 
 const getModalStyle = () => ({
   outline: 'none',
@@ -40,12 +40,12 @@ const styles = theme => ({
 class SimpleModal extends React.Component {
   state = {
     openModal: false,
+    closeModal: false,
     description: '',
     amount: '',
     agency: '',
     account: '',
     paymentDate: '',
-    name: '',
   };
 
   componentWillReceiveProps(state) {
@@ -56,16 +56,35 @@ class SimpleModal extends React.Component {
     this.setState({ [key]: event.target.value });
 	};
 
+  saveNewPayment = (history) => {
+    const payment = {
+      description: this.state.description,
+      amount: this.state.amount,
+      agency: this.state.agency,
+      account: this.state.account,
+      paymentDate: new Date(this.state.paymentDate),
+    };
+
+    axios.post('http://localhost:3001/api/payments', payment)
+      .then(res => console.log(res))
+    this.setState({ closeModal: true })
+  }
+
   render() {
     const { classes, houseName, open } = this.props;
-    const { error, openModal } = this.state;
+    const { error, openModal, closeModal } = this.state;
+
+    let modalStatusOpen = open;
+    if (closeModal) {
+      modalStatusOpen = false;
+    } 
 
     return (
       <div className={classes.root}>
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          open={open}
+          open={modalStatusOpen}
         >
           <div style={getModalStyle()} className={classes.paper}>
             <Typography variant="h6" id="modal-title">
@@ -82,11 +101,6 @@ class SimpleModal extends React.Component {
 						</FormControl>
 
             <p style={{ marginTop: '40px', marginBottom: '0' }}>Informações do Favorecido</p>
-
-            <FormControl className={classes.input}>
-							<InputLabel htmlFor="agency">Nome completo</InputLabel>
-							<Input id="agency" value={this.state.name} error={error} onChange={(e) => this.handleChange(e, 'name')} />
-						</FormControl>
             
             <FormControl className={classes.input}>
 							<InputLabel htmlFor="agency">Agência</InputLabel>
@@ -106,9 +120,10 @@ class SimpleModal extends React.Component {
               InputLabelProps={{
                 shrink: true,
               }}
+              onChange={(e) => this.handleChange(e, 'paymentDate')}
             />
             {openModal &&
-              <Button variant="contained" color="primary" className={classes.button} onClick={this.handleOpen}>
+              <Button variant="contained" color="primary" className={classes.button} onClick={this.saveNewPayment}>
                 Adicionar
               </Button>}
             <SimpleModalWrapped />
@@ -123,6 +138,6 @@ SimpleModal.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const SimpleModalWrapped = withRouter(withStyles(styles)(SimpleModal));
+const SimpleModalWrapped = withStyles(styles)(SimpleModal);
 
 export default SimpleModalWrapped;
