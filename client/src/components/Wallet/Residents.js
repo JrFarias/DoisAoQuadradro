@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
 import Divider from '@material-ui/core/Divider';
 import { WhatsappShareButton } from 'react-share';
+import axios from 'axios';
 
 const styles = {
   grow: {
@@ -35,7 +36,7 @@ const dividerStyles = theme => ({
 });
 
 function InsetDividers(props) {
-  const { classes } = props;
+  const { classes, profiles } = props;
   return (
     <div className={classes.root}>
       <List>
@@ -45,33 +46,19 @@ function InsetDividers(props) {
         <li>
           <Divider inset />
         </li>
-        <ListItem>
-          <Avatar>
-            <ImageIcon />
-          </Avatar>
-          <ListItemText primary="Bruno olar" secondary="bruno@g.com" />
-        </ListItem>
-        <Divider inset component="li" />
-        <ListItem>
-          <Avatar>
-          <ImageIcon />
-          </Avatar>
-          <ListItemText primary="Yukiko olar" secondary="yukiko@g.com" />
-        </ListItem>
-        <Divider inset component="li" />
-        <ListItem>
-          <Avatar>
-            <ImageIcon />
-          </Avatar>
-          <ListItemText primary="Alexandre" secondary="ale@g.com" />
-        </ListItem>
-        <Divider inset component="li" />
-        <ListItem>
-          <Avatar>
-            <ImageIcon />
-          </Avatar>
-          <ListItemText primary="Junior" secondary="junior@g.com" />
-        </ListItem>
+        {
+          profiles.map(p => (
+            <div key={p._id}>
+              <ListItem>
+                <Avatar>
+                  <ImageIcon />
+                </Avatar>
+                <ListItemText primary={p.name} secondary={p.email} />
+              </ListItem>
+              {/* <Divider inset component="li" /> */}
+            </div>
+          ))
+        }
       </List>
     </div>
   );
@@ -83,25 +70,35 @@ InsetDividers.propTypes = {
 
 const ResidentList = withStyles(dividerStyles)(InsetDividers);
 
-function residents(props) {
-  const { classes } = props;
+class Residents extends React.Component {
+  state = {
+    profiles: [],
+  }
 
-  return (
-    <div>
-        <div>
-          <ResidentList />
-          <Button variant="contained" color="primary" className={classes.button}>
-            <WhatsappShareButton url={'https://sharePay/register'} title={'share pay'} separator=":: ">
-              Enviar Convite
-            </WhatsappShareButton>
-          </Button>
-        </div>
-    </div>
-  );
+  componentDidMount() {
+    axios.get('http://localhost:3001/api/profiles')
+    .then(res => {
+      this.setState({ profiles: res.data })
+    })
+  }
+
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <div>
+          <div>
+            <ResidentList profiles={this.state.profiles} />
+            <Button variant="contained" color="primary" className={classes.button}>
+              <WhatsappShareButton url={'https://sharePay/register'} title={'share pay'} separator=":: ">
+                Enviar Convite
+              </WhatsappShareButton>
+            </Button>
+          </div>
+      </div>
+    );
+  }
 }
 
-residents.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
-export default withStyles(styles)(residents);
+export default withStyles(styles)(Residents);
