@@ -58,13 +58,13 @@ function Home(props) {
         <div className={classes.home}>
           <img src={HighFive} style={{ height: '100px' }} alt="HighFive" />
           <div style={{ marginTop: '30px', textAlign: 'center'}}>
-            <p><strong>1° Passo</strong> <br />Adicione as contas da casa</p>
-            <p><strong>2° Passo</strong> <br />Convide quem mora com você</p>
-            <p><strong>3° Passo</strong> <br />Compartilhe o valor total</p>
-            <p><strong>4° Passo</strong> <br />Pague sua parte</p>
+            <p>• Adicione as contas de casa</p>
+            <p>• Convide quem mora com você</p>
+            <p>• Compartilhe o valor total</p>
+            <p>• Pague sua parte</p>
           </div>
           <Button variant="contained" color="primary" className={classes.button} onClick={() => handleButton(history)}>
-            Carteira da casa
+            Dividir contas
           </Button>
         </div>
         </CardContent>

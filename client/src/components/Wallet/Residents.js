@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
 import Divider from '@material-ui/core/Divider';
+import { WhatsappShareButton } from 'react-share';
 
 const styles = {
   grow: {
@@ -83,21 +84,16 @@ InsetDividers.propTypes = {
 const ResidentList = withStyles(dividerStyles)(InsetDividers);
 
 function residents(props) {
-  const { classes, history } = props;
+  const { classes } = props;
 
   return (
     <div>
         <div>
           <ResidentList />
-          {/* <img src={HighFive} style={{ height: '100px' }} alt="HighFive" /> */}
-          {/* <div style={{ marginTop: '30px', textAlign: 'center'}}>
-            <p><strong>1° Passo</strong> <br />Adicione as contas da casa</p>
-            <p><strong>2° Passo</strong> <br />Convide quem mora com você</p>
-            <p><strong>3° Passo</strong> <br />Compartilhe o valor total</p>
-            <p><strong>4° Passo</strong> <br />Pague sua parte</p>
-          </div> */}
           <Button variant="contained" color="primary" className={classes.button}>
-            Enviar Convite
+            <WhatsappShareButton url={'https://sharePay/register'} title={'share pay'} separator=":: ">
+              Enviar Convite
+            </WhatsappShareButton>
           </Button>
         </div>
     </div>

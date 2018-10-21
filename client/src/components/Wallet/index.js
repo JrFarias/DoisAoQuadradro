@@ -113,17 +113,17 @@ class FullWidthTabs extends React.Component {
 		this.setState({ open: true })
 	}
 
-	goBack = (history) => history.push('/');
+	goBack = () => this.props.history.push('/');
 
   render() {
-		const { classes, theme, history } = this.props;
+		const { classes, theme } = this.props;
 		const { error, open, ammount, name, sharedAmmount } = this.state;
 
     return (
       <div className={classes.root}>
 				<AppBar position="static" className={classes.header}>
 					<Toolbar>
-						<IconButton className={classes.arrowButton} color="inherit" aria-label="Arrow-Button" onClick={() => this.goBack(history)}>
+						<IconButton className={classes.arrowButton} color="inherit" aria-label="Arrow-Button" onClick={this.goBack}>
 							<ArrowBack />
 						</IconButton>
 						<Typography variant="h6" color="inherit" className={classes.title}>
