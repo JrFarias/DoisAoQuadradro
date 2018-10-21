@@ -9,8 +9,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import axios from 'axios';
 import { withRouter } from 'react-router';
-
-import Logo from './Logo.svg';
+import cardSvg from './debit-card.svg';
 
 const styles = {
   header: {
@@ -32,12 +31,15 @@ const styles = {
   }
 };
 
-class Register extends React.Component {
+class Card extends React.Component {
   state = {
-    name: '',
-    email: '',
-    documentId: '',
-    error: false,
+    userId: '',
+    card_number: '',
+    card_cvv: '',
+    card_holder_name: '',
+  }
+
+  componentDidMount() {
   }
 
   handleChange = (event, key) => {
@@ -45,21 +47,15 @@ class Register extends React.Component {
   };
   
   handleOnclick = () => {
-    if (!!this.state.name && !!this.state.email && !!this.state.documentId) {
-      this.setState({ error: true })
-      return
-    }
-
-    axios.post('http://localhost:3001/api/profile', this.state)
+    axios.post('http://localhost:3001/api/credit-card', this.state)
     .then(res => {
-      const userId = res._id;
-      this.props.history.push('/card', userId);
+      this.props.history.push('/Wallet');
     })
   } 
 
   render() {
     const { classes } = this.props;
-    const { name, email, documentId, error } = this.state;
+    const { card_number, card_cvv, card_holder_name } = this.state;
 
     return (
       <div>
@@ -71,23 +67,22 @@ class Register extends React.Component {
           </Toolbar>
         </AppBar>
         <div className={classes.root}>
-          <img src={Logo} style={{ height: '100px' }} alt="Logo" />
-          <p>Compartilhe as despesas da casa com várias pessoas e pague por aqui mesmo.</p>
-          <p><strong>Cadastre-se de graça</strong><br /> para convidar outras pessoas.</p>
+          <img src={cardSvg} style={{ height: '150px' }} alt="Logo" />
+          <p><strong>Para organizar as despesas</strong><br /> da sua casa, precisamos dos dados do cartão de crédito.</p>
     
           <FormControl className={classes.input}>
-            <InputLabel htmlFor="register-name">Nome Completo</InputLabel>
-            <Input id="register-name" value={name} error={error}  onChange={(e) => this.handleChange(e, 'name')} />
+            <InputLabel htmlFor="Card-number">Numero do Cartão</InputLabel>
+            <Input id="card-number" value={card_number} onChange={(e) => this.handleChange(e, 'card_number')} />
           </FormControl>
     
           <FormControl className={classes.input}>
-            <InputLabel htmlFor="register-email">Email</InputLabel>
-            <Input id="register-email" value={email} error={error} onChange={(e) => this.handleChange(e, 'email')} />
+            <InputLabel htmlFor="card-cvv">CVV</InputLabel>
+            <Input id="card-cvv" value={card_cvv} onChange={(e) => this.handleChange(e, 'card_cvv')} />
           </FormControl>
 
           <FormControl className={classes.input}>
-            <InputLabel htmlFor="register-documentId">CPF</InputLabel>
-            <Input id="register-documentId" value={documentId} error={error} onChange={(e) => this.handleChange(e, 'documentId')} />
+            <InputLabel htmlFor="card-holder-name">MM/AA</InputLabel>
+            <Input id="card-holder-name" value={card_holder_name} onChange={(e) => this.handleChange(e, 'card_holder_name')} />
           </FormControl>
     
           <Button variant="contained" color="primary" className={classes.button} onClick={this.handleOnclick}>
@@ -99,4 +94,4 @@ class Register extends React.Component {
   }  
 }
 
-export default withRouter(withStyles(styles)(Register));
+export default withRouter(withStyles(styles)(Card));

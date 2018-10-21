@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Wallet from './components/Wallet';
 import Register from './components/Register';
+import Card from './components/Card';
 
 const App = () => (
   <Router>
@@ -10,15 +11,9 @@ const App = () => (
       <Route exact path="/" component={Home} />
       <Route path="/wallet" component={Wallet} />
       <Route path="/register" component={Register} />
+      <Route path="/card" component={Card} />
     </div>
   </Router>
-);
-
-
-const Login = () => (
-  <div>
-    <h2>About</h2>
-  </div>
 );
 
 export default App;
